@@ -1,0 +1,1304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kalavirasat – Preserving Cultural Heritage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
+    }
+
+    body {
+      background: #f7ecdd;
+      color: #4b2b16;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #f7ecdd, #f3e3cf);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- SPLASH SCREEN ---------- */
+    .splash {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .splash-logo-box {
+      width: 380px;
+      height: 380px;
+      border-radius: 32px;
+      background: #f6e7d2;
+      box-shadow: 0 16px 40px rgba(120, 86, 60, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .splash-logo-inner {
+      width: 340px;
+      height: 340px;
+      border-radius: 28px;
+      border: 1px solid #d6b58f;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f6e7d2;
+    }
+
+    .splash-logo-img {
+      max-width: 130%;
+      max-height: 130%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .splash-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+    }
+
+    .splash-subtitle {
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8d6040;
+    }
+
+    /* ---------- STATES LIST SCREEN ---------- */
+    .states-header {
+      background: #92572a;
+      padding: 18px 18px 26px;
+      color: #fef7ec;
+      box-shadow: 0 6px 14px rgba(93, 50, 18, 0.35);
+    }
+
+    .states-title-main {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .states-title-sub {
+      font-size: 14px;
+      color: #f4e4cf;
+    }
+
+    .search-container {
+      margin-top: 18px;
+      padding: 0 18px 14px;
+      margin-top: -18px;
+    }
+
+    .search-box {
+      width: 100%;
+      border-radius: 999px;
+      background: #fdf5eb;
+      padding: 10px 14px;
+      border: 1px solid #e3c9aa;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 22px rgba(146, 88, 42, 0.18);
+    }
+
+    .search-icon {
+      font-size: 18px;
+    }
+
+    .search-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      width: 100%;
+      color: #5f3d22;
+    }
+
+    .search-input::placeholder {
+      color: #b49070;
+    }
+
+    .states-body {
+      padding: 10px 18px 18px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .states-helper-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .states-helper-sub {
+      font-size: 13px;
+      color: #9b7452;
+      margin-bottom: 10px;
+    }
+
+    .state-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+      padding-bottom: 18px;
+    }
+
+    .state-card {
+      background: #fdf6ee;
+      border-radius: 18px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 18px rgba(146, 88, 42, 0.16);
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .state-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(146, 88, 42, 0.2);
+    }
+
+    .state-icon {
+      
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;   /* square, not circle */
+      background: linear-gradient(135deg, #f1d6b0, #e5c39a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* NEW CODE - USE THIS */
+  .state-icon img {
+      width: 100%;          /* Fills the whole width of the box */
+      height: 100%;         /* Fills the whole height of the box */
+      object-fit: cover;    /* Ensures the image fills the area without empty space */
+      border-radius: 10px;  /* Matches the rounded corners of the box */
+      display: block;
+}
+
+    .state-text-main {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .state-text-sub {
+      font-size: 13px;
+      color: #a0734f;
+    }
+
+    .state-arrow {
+      margin-left: auto;
+      font-size: 18px;
+      color: #c49467;
+    }
+
+    /* ---------- STATE DETAIL SCREEN (TILES) ---------- */
+    .detail-header {
+      background: #92572a;
+      padding: 16px 16px 22px;
+      color: #fff7eb;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 6px 14px rgba(93, 50, 18, 0.35);
+    }
+
+    .detail-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(247, 234, 214, 0.18);
+      color: #fff7eb;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .detail-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    /*.detail-edit {
+      margin-left: auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: none;
+      background: #fdf5eb;
+      color: #8b5426;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }*/
+
+    .detail-search-wrap {
+      padding: 10px 18px;
+      background: #f7ecdd;
+    }
+
+    .detail-search-box {
+      width: 100%;
+      border-radius: 999px;
+      background: #fdf6ee;
+      padding: 9px 14px;
+      border: 1px solid #e3c9aa;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-body {
+      padding: 10px 18px 24px;
+      flex: 1;
+      background: #f7ecdd;
+    }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .tile {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      height: 150px;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(146, 88, 42, 0.18);
+    }
+
+    .tile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tile-label {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #ffffff;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .tile::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent 60%);
+    }
+
+    .tile.no-img {
+      background: linear-gradient(135deg, #e0b78f, #c78c55);
+    }
+
+    /* ---------- CATEGORY LIST SCREEN (PLACES / ARTS / TRIBALS) ---------- */
+    .list-header {
+      background: #92572a;
+      padding: 16px 16px 14px;
+      color: #fff7eb;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(93, 50, 18, 0.35);
+    }
+
+    .list-back {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      border: none;
+      background: rgba(247, 234, 214, 0.25);
+      color: #fff7eb;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .list-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .list-main-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+    }
+
+    .list-sub-title {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .list-edit {
+      margin-left: auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      background: #fdf5eb;
+      color: #8b5426;
+      cursor: pointer;
+    }
+
+    .list-search-wrap {
+      padding: 8px 16px;
+      background: #f7ecdd;
+    }
+
+    .list-search-box {
+      width: 100%;
+      border-radius: 12px;
+      background: #fdf6ee;
+      padding: 8px 12px;
+      border: 1px solid #e3c9aa;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .list-body {
+      padding: 10px 16px 18px;
+      flex: 1;
+      background: #f8f4ec;
+      overflow-y: auto;
+    }
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+      cursor: pointer;
+    }
+
+    .item-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .item-text-main {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .item-text-sub {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .item-dots {
+      margin-left: auto;
+      font-size: 20px;
+      color: #9ca3af;
+    }
+
+    .empty-text {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 12px;
+    }
+
+    /* ---------- PLACE DETAIL (MARTAND SUN TEMPLE BROWN) ---------- */
+    .place-header {
+      background: #92572a;
+      padding: 16px 16px 12px;
+      color: #fff7eb;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(93, 50, 18, 0.35);
+    }
+
+    .place-back {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      border: none;
+      background: rgba(247, 234, 214, 0.25);
+      color: #fff7eb;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .place-title {
+      font-size: 18px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .place-edit {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #fdf5eb;
+      color: #92572a;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .place-body {
+      padding: 12px 14px 18px;
+      background: #ffffff;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .video-card {
+      background: #ffffff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(84, 94, 118, 0.16);
+      margin-bottom: 14px;
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000000;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .video-meta {
+      padding: 8px 12px 10px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .video-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: #92572a;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .video-meta-text-main {
+      font-weight: 600;
+    }
+
+    .video-meta-text-sub {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .video-buttons {
+      display: flex;
+      gap: 8px;
+      padding: 10px 10px 12px;
+    }
+
+    .video-btn.secondary {
+      flex: 1;
+      padding: 9px 10px;
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .place-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #111827;
+      margin-bottom: 14px;
+    }
+
+    .place-images {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .place-images img {
+      width: 100%;
+      border-radius: 18px;
+      display: block;
+      object-fit: cover;
+    }
+
+    @media (max-width: 360px) {
+      .states-title-main { font-size: 22px; }
+      .state-text-main { font-size: 15px; }
+      .detail-title { font-size: 16px; }
+      .tile { height: 135px; }
+      .list-main-title { font-size: 16px; }
+      .place-title { font-size: 16px; }
+    }
+    .list-search-wrap,
+    .detail-search-wrap
+    
+    {
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- ========= SPLASH ========= -->
+    <section id="screen-splash" class="screen splash active">
+      <div>
+        <div class="splash-logo-box">
+          <div class="splash-logo-inner">
+            <img src="https://files.catbox.moe/7p2f7i.jpg" class="splash-logo-img" />
+          </div>
+        </div>
+        <div class="splash-title">Kalavirasat</div>
+        <div class="splash-subtitle">Preserving Cultural Heritage</div>
+      </div>
+    </section>
+
+    <!-- ========= STATES LIST ========= -->
+    <section id="screen-states" class="screen">
+      <header class="states-header">
+        <div class="states-title-main">Explore Heritage of India</div>
+        <div class="states-title-sub">Select a state to discover its cultural treasures</div>
+      </header>
+
+      <div class="search-container">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="searchStates" class="search-input" type="text" placeholder="Search states..." />
+        </div>
+      </div>
+
+      <main class="states-body">
+        <div class="states-helper-title">Indian States</div>
+        <div class="states-helper-sub">Tap on any state to see categories like Tribals, Arts, Culture and Places.</div>
+        <div id="stateList" class="state-list"></div>
+      </main>
+    </section>
+
+    <!-- ========= STATE DETAIL ========= -->
+    <section id="screen-detail" class="screen">
+      <header class="detail-header">
+        <button id="btnBack" class="detail-back">&#8592;</button>
+        <div id="detailStateTitle" class="detail-title">STATE NAME</div>
+      </header>
+
+      <div class="detail-search-wrap">
+        <div class="detail-search-box">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" type="text" placeholder="Search" />
+        </div>
+      </div>
+
+      <main class="detail-body">
+        <div class="tile-grid">
+          <div class="tile" data-category="tribals">
+            <img class="tile-img" src="https://files.catbox.moe/9du9mp.jpg" alt="Tribals" onerror="this.parentElement.classList.add('no-img'); this.remove();" />
+            <div class="tile-label">TRIBALS</div>
+          </div>
+          <div class="tile" data-category="arts">
+            <img class="tile-img" src="https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Arts" onerror="this.parentElement.classList.add('no-img'); this.remove();" />
+            <div class="tile-label">ARTS</div>
+          </div>
+          <div class="tile" data-category="culture">
+            <img class="tile-img" src="https://files.catbox.moe/naye8m.jpg" alt="Culture" onerror="this.parentElement.classList.add('no-img'); this.remove();" />
+            <div class="tile-label">CULTURE</div>
+          </div>
+          <div class="tile" data-category="places">
+            <img class="tile-img" src="https://images.pexels.com/photos/460376/pexels-photo-460376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Places" onerror="this.parentElement.classList.add('no-img'); this.remove();" />
+            <div class="tile-label">PLACES</div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- ========= CATEGORY LIST ========= -->
+    <section id="screen-category" class="screen">
+      <header class="list-header">
+        <button id="btnBackFromList" class="list-back">&#8592;</button>
+        <div class="list-title-wrap">
+          <div id="listTitle" class="list-main-title">PLACES</div>
+          <div id="listStateSubtitle" class="list-sub-title">JAMMU &amp; KASHMIR</div>
+        </div>
+      
+      </header>
+      <div class="list-search-wrap">
+        <div class="list-search-box">
+          <span class="search-icon">🔍</span>
+          <input id="listSearchInput" class="search-input" type="text" placeholder="Search" />
+        </div>
+      </div>
+
+     
+
+      <main class="list-body">
+        <div id="itemList" class="item-list"></div>
+      </main>
+    </section>
+
+    <!-- ========= PLACE DETAIL ========= -->
+    <section id="screen-place-detail" class="screen">
+      <header class="place-header">
+        <button id="btnBackFromPlace" class="place-back">&#8592;</button>
+        <div id="placeTitle" class="place-title">MARTAND SUN TEMPLE</div>
+      </header>
+
+      <main class="place-body">
+    
+    <div class="video-card" id="video-container">
+        <div class="video-frame">
+            <video id="placeVideoFrame" controls width="100%">
+                <source id="placeVideoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="video-meta"></div>
+        <div class="video-buttons">
+            <button id="mapBtn" class="video-btn secondary" 
+             style="padding:10px 16px; border-radius:8px; background:#f44336; color:white; border:none; cursor:pointer;">
+             📍 View on Map
+            </button>
+        </div>
+    </div>
+
+    <div class="place-images" id="placeImages"></div>
+
+    <article class="place-text" id="placeDescription"></article>
+
+</main>
+    </section>
+  </div>
+
+  <script>
+    // ========= JS =========
+    const states = [
+      { name: "Andhra Pradesh", capital: "Amaravathi", img: "https://files.catbox.moe/hwi44j.jpg"},
+      { name: "Jammu & Kashmir", capital: "Srinagar / Jammu" ,img: "https://files.catbox.moe/lc125r.jpg"},
+      { name: "Arunachal Pradesh", capital: "Itanagar",img:"https://files.catbox.moe/pod4a4.jpg"},
+      { name: "Assam", capital: "Dispur" ,img: "https://files.catbox.moe/7ul59o.jpg"},
+      { name: "Bihar", capital: "Patna" ,img: "https://files.catbox.moe/fluv59.jpg"},
+      { name: "Chhattisgarh", capital: "Raipur",img: "https://files.catbox.moe/mid0vy.jpg" },
+      { name: "Goa", capital: "Panaji",img: "https://files.catbox.moe/i9drpv.jpg" },
+      { name: "Gujarat", capital: "Gandhinagar",img: "https://files.catbox.moe/suqku2.jpg" },
+      { name: "Haryana", capital: "Chandigarh",img: "https://files.catbox.moe/kl2g31.jpg" },
+      { name: "Himachal Pradesh", capital: "Shimla",img: "https://files.catbox.moe/booh9s.jpg" },
+      { name: "Jharkhand", capital: "Ranchi" ,img: "https://files.catbox.moe/wcncna.jpg"},
+      { name: "Karnataka", capital: "Bengaluru",img: "https://files.catbox.moe/wuhmrw.jpg" },
+      { name: "Kerala", capital: "Thiruvananthapuram",img: "https://files.catbox.moe/n8nv90.jpg" },
+      { name: "Madhya Pradesh", capital: "Bhopal",img: "https://files.catbox.moe/8k6ivt.jpg" },
+      { name: "Maharashtra", capital: "Mumbai",img: "https://files.catbox.moe/kk31xd.jpg" },
+      { name: "Manipur", capital: "Imphal",img: "https://files.catbox.moe/qn4gfw.jpg" },
+      { name: "Meghalaya", capital: "Shillong",img: "https://files.catbox.moe/ummhil.jpg" },
+      { name: "Mizoram", capital: "Aizawl" ,img: "https://files.catbox.moe/q3av6b.jpg"},
+      { name: "Nagaland", capital: "Kohima" ,img: "https://files.catbox.moe/jrptob.jpg"},
+      { name: "Odisha", capital: "Bhubaneswar",img: "https://files.catbox.moe/cgh3xn.jpg" },
+      { name: "Punjab", capital: "Chandigarh" ,img: "https://files.catbox.moe/hxmgv3.jpg"},
+      { name: "Rajasthan", capital: "Jaipur" ,img: "https://files.catbox.moe/tfet3a.jpg"},
+      { name: "Sikkim", capital: "Gangtok",img: "https://files.catbox.moe/yjgxrk.jpg" },
+      { name: "Tamil Nadu", capital: "Chennai",img: "https://files.catbox.moe/tl8glw.jpg" },
+      { name: "Telangana", capital: "Hyderabad",img: "https://files.catbox.moe/fkwhui.jpg" },
+      { name: "Tripura", capital: "Agartala" ,img: "https://files.catbox.moe/qbswb9.jpg"},
+      { name: "Uttar Pradesh", capital: "Lucknow",img: "https://files.catbox.moe/hy4xwh.jpg" },
+      { name: "Uttarakhand", capital: "Dehradun",img: "https://files.catbox.moe/w9tdfv.jpg" },
+      { name: "West Bengal", capital: "Kolkata" ,img: "https://files.catbox.moe/t1cwhi.jpg"} 
+    ];
+
+    const stateContent = {
+  "Jammu & Kashmir": {
+    places: [
+      { name: "ACHAL GARDEN", subtitle: "PLACES", img: "https://files.catbox.moe/msh2ar.jpg" ,
+      images: ["https://files.catbox.moe/msh2ar.jpg"],
+        mapUrl:"https://www.google.com/maps?q=Achabal+Garden,+Anantnag,+Jammu+and+Kashmir",
+        description:"Achabal Garden is a historic Mughal garden located in the Anantnag district of Jammu and Kashmir. It was built during the Mughal period and is famous for its natural spring and beautifully terraced layout. The garden reflects traditional Mughal architecture with flowing water channels. It remains a popular tourist and heritage site.",
+      },
+      { name: "VERINAG", subtitle: "PLACES", img: "https://files.catbox.moe/86xuk7.jpg" ,
+      images: ["https://files.catbox.moe/86xuk7.jpg"],
+        mapUrl:"https://www.google.com/maps?q=Verinag+Garden,+Anantnag,+Jammu+and+Kashmir",
+        description:"Verinag is a historic Mughal garden known for the natural spring that forms the source of the Jhelum River. Surrounded by lush greenery and mountains, it was developed during the Mughal era. The octagonal stone basin and garden design showcase classic Mughal engineering. Verinag is both a cultural and ecological landmark.",
+      },
+      {
+        name: "MARTAND SUN TEMPLE",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/aiybg8.jpg",
+        videoUrl: "https://files.catbox.moe/v3i68s.mp4",
+        mapUrl: "https://maps.app.goo.gl/g31zhy37vtCGigrb9",
+        description: `
+The Martand Sun Temple is an ancient Hindu temple dedicated to Surya, the Sun God.
+Built in the 8th century CE by Lalitaditya Muktapida, it is a masterpiece of Kashmiri architecture.
+Though in ruins today, it remains a symbol of Kashmir’s spiritual and artistic heritage.
+        `,
+        images: [
+          "https://files.catbox.moe/aiybg8.jpg",
+          "https://files.catbox.moe/js8oa2.webp"
+        ]
+      },
+      { name: "AHARBAL WATER FALL", subtitle: "PLACES", 
+        img: "https://files.catbox.moe/417b8n.jpg",
+        images: ["https://files.catbox.moe/417b8n.jpg"],
+        mapUrl: "https://www.google.com/maps?q=33.5286,74.7780",
+        description:`"Aharbal Waterfall, often called the 'Niagara Falls of Kashmir', is a powerful,
+        picturesque waterfall in the Kulgam district, Kashmir, where the Veshu River plunges through a
+         narrow granite gorge, creating a thunderous roar and beautiful, churning water that forms a 
+         calm blue pool, surrounded by pine forests in the Pir Panjal mountains, making it a
+          popular spot for nature lovers and trekkers."
+          
+        `, },
+      { name: "KHEER BHAWANI TEMPLE", subtitle: "PLACES", 
+        img: "https://files.catbox.moe/xywqnj.jpg" ,
+        images: ["https://files.catbox.moe/xywqnj.jpg"],
+        mapUrl:"https://www.google.com/maps/place/Kheer+Bhawani+Temple",
+        description:"Kheer Bhawani Temple is a highly revered Hindu shrine dedicated to Goddess Ragnya Devi. Located in Tulmulla village near Srinagar, it is famous for its sacred spring whose water changes color, believed to be a spiritual sign.he Kheer Bhawani Temple is a significant Hindu shrine in Tulmulla village near Srinagar, Kashmir, dedicated to Goddess Ragnya Devi, known for its sacred spring whose water color changes to foretell future events, especially calamities, and where devotees offer kheer (rice pudding). Built by Maharaja Pratap Singh in 1912, this temple is a major pilgrimage site for Kashmiri Pandits, famous for its serene atmosphere amidst Chinar trees and simple, beautiful architecture. "
+      },
+    ],
+    arts: [{ name: "PASHMINA WEAVING", subtitle: "PASHMINA WEAVING", img: "https://files.catbox.moe/tab7b6.jpg",
+            // mapUrl:"https://maps.google.com/?q=Srinagar%2C+Jammu+and+Kashmir",
+             description:"A major centre for authentic Pashmina shawl weaving in India, where artisans hand-weave luxurious cashmere products using age-old techniques passed down generations. Kashmir’s pashmina is world-renowned for its softness, warmth, and intricate patterns. The craft remains a vital source of livelihood in and around Srinagar.",
+             images: ["https://files.catbox.moe/tab7b6.jpg"]
+            },
+          { name: "PAPIER-MACHE", subtitle: "PAPIER-MACHE", img: "https://files.catbox.moe/xbgos8.jpg",
+            //mapUrl:"https://maps.google.com/?q=Shahr-e-Khaas%2C+Srinagar%2C+Jammu+and+Kashmir",
+             description:"Kashmiri papier-mâché is a vibrant art form using layered paper pulp to create ornamental bowls, trays, and décor items, adorned with rich colours and floral motifs. This craft was introduced in the region in the 14th century and remains iconic in Srinagar’s workshops and markets.", 
+             images: ["https://files.catbox.moe/xbgos8.jpg"]
+            },
+          { name: "CARPET WEAVING", subtitle: "CARPET WEAVING", img: "https://files.catbox.moe/xkdpmu.jpg" ,
+           // mapUrl:"https://maps.google.com/?q=Kashmir+Carpet+Weaving+Srinagar%2C+Jammu+and+Kashmir",
+             description:"Srinagar and surrounding areas are famed for hand-knotted carpets and rugs featuring intricate Kashmiri motifs and rich colours. These carpets are made from fine wool or silk and take months to complete, reflecting deep artisan skill",
+             images: ["https://files.catbox.moe/xkdpmu.jpg"]
+            },
+          { name: "WOOD WEAVING", subtitle: "WOOD WEAVING", img: "https://files.catbox.moe/196y3g.jpg",
+           // mapUrl:"https://maps.google.com/?q=Noor+Bagh%2C+Srinagar%2C+Jammu+and+Kashmir",
+             description:"Artisans in Srinagar craft beautiful wood carvings—especially using local walnut wood—producing furniture, decorative pieces, and artifacts with detailed floral and geometric designs. This craft is an essential part of Kashmiri handicraft tradition.", 
+             images: ["https://files.catbox.moe/196y3g.jpg"]
+            },
+          
+          { name: "EMBROIDERY", subtitle: "EMBROIDERY", img: "https://files.catbox.moe/zuvwna.jpg",
+            //mapUrl:"https://maps.google.com/?q=Ganta+Ghar%2C+Srinagar%2C+Jammu+and+Kashmir",
+             description:"Kashmiri embroidery (like Sozni and Tille) adorns shawls, garments, and textiles with fine floral patterns stitched by hand, reflecting regional motifs and skilled needlework. It enhances many local crafts such as shawls and carpets.",
+             images: ["https://files.catbox.moe/zuvwna.jpg"]
+            },
+          { name: "METAL CRAFTS", subtitle: "METAL CRAFTS", img: "https://files.catbox.moe/taes7h.jpg",
+           // mapUrl:"https://maps.google.com/?q=Zaina+Kadal%2C+Srinagar%2C+Jammu+and+Kashmir",
+             description:"Metal crafts in Kashmir include engraved copperware, utensils, and decorative items made by skilled artisans. These pieces often feature customary designs and are popular souvenirs in Srinagar markets.",
+             images: ["https://files.catbox.moe/taes7h.jpg"]
+            }
+        ],
+    tribals: [{ name: "GUJJARS", subtitle: "GUJJARS", img: "https://files.catbox.moe/8cqwps.jpeg",
+            mapUrl:"https://www.google.com/maps?q=Rajouri+District,+Jammu+and+Kashmir",
+            description:"Gujjars are a pastoral tribal community mainly found in the hilly and forest regions of Jammu and Kashmir. They traditionally depend on cattle rearing and dairy farming for their livelihood. Gujjars have a rich cultural heritage, distinct language, and strong ties to nature. Many Gujjars now live a semi-nomadic or settled lifestyle.",},
+          { name: "BAKAWALS", subtitle: "BAKAWALS", img: "https://files.catbox.moe/m7zcgq.jpeg" ,mapUrl:"https://www.google.com/maps?q=Pir+Panjal+Range,+Jammu+and+Kashmir",
+             description:"Bakarwals are a nomadic tribal community known for seasonal migration across the Pir Panjal range. They move with their flocks of sheep and goats in search of grazing pastures. Their lifestyle is closely linked to the mountains and changing seasons. Bakarwals play an important role in the region’s pastoral economy.",},
+          { name: "GADDIS", subtitle: "GADDIS", img: "https://files.catbox.moe/147udf.webp" ,mapUrl:"https://maps.google.com/?q=Himachal+Pradesh%2C+India",
+             description:"Gaddis are a semi-pastoral tribal community primarily from Himachal Pradesh and parts of Jammu & Kashmir, known for sheep rearing and wool production in high-altitude areas. They maintain distinctive cultural traditions and attire linked with Himalayan life.",},
+          { name: "PAHARIS", subtitle: "PAHARIS", img: "https://files.catbox.moe/6ctqqd.jpg" ,mapUrl:" https://maps.google.com/?q=Poonch+Rajouri+Area%2C+Jammu+and+Kashmir",
+             description:"Paharis are hill-dwelling communities living mainly in the rugged regions of Jammu & Kashmir, especially in Poonch and Rajouri. They are traditionally involved in agriculture and livestock and have their own local languages and cultural practices",}],
+    culture: []
+  },
+
+  "Andhra Pradesh": {
+    places: [
+      {
+        name: "GANDIKOTA",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/ug7iwz.jpg",
+        mapUrl: "https://maps.app.goo.gl/tbsP6twWSAWajVfw8",
+        description: `
+Known as the Grand Canyon of India, Gandikota is a historic fort town located on the banks
+of the Pennar River. The dramatic gorge and ancient fort ruins make it one of Andhra Pradesh’s
+most breathtaking heritage sites.
+        `,
+        images: ["https://files.catbox.moe/ug7iwz.jpg"]
+      },
+      {
+        name: "LEPAKSHI",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/qh49uo.jpeg",
+        mapUrl: "https://maps.app.goo.gl/1VoM2RhJpbF1JqVK8",
+        description: `
+Lepakshi is renowned for its Vijayanagara-style architecture, intricate carvings,
+and the famous hanging pillar in the Veerabhadra Temple complex.
+        `,
+        images: ["https://files.catbox.moe/qh49uo.jpeg"]
+      },
+      {
+        name: "AMARAVATHI",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/1rafb1.jpeg",
+        mapUrl: "https://maps.app.goo.gl/XkjZ3QhjFYSdYhim8",
+        description: `
+Amaravathi is an ancient Buddhist center and former capital of the Satavahana dynasty.
+It holds immense archaeological and spiritual significance in Indian history.
+        `,
+        images: ["https://files.catbox.moe/1rafb1.jpeg"]
+      },
+      {
+        name: "BORRA CAVES",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/l5pp5x.jpeg",
+        mapUrl: "https://maps.app.goo.gl/hFF14Mf8Qo9AePyZ6",
+        description: `
+Borra Caves are one of India’s largest limestone caves, formed millions of years ago
+and famous for natural stalactite and stalagmite formations.
+        `,
+        images: ["https://files.catbox.moe/l5pp5x.jpeg"]
+      },
+      {
+        name: "CHANDRAGIRI",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/bv9og0.jpg",
+        mapUrl: "https://maps.app.goo.gl/9QEHWPK4ES71BTwA8",
+        description: `
+Chandragiri Fort was once a capital of the Vijayanagara Empire and showcases
+Indo-Islamic architectural influence.
+        `,
+        images: ["https://files.catbox.moe/bv9og0.jpg"]
+      },
+      {
+        name: "UNDAVALLI CAVES",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/zlmb8z.jpeg",
+        mapUrl: "https://maps.app.goo.gl/MYJyJJYZKeAPC9Yn6",
+        description: `
+Undavalli Caves are ancient rock-cut caves carved from sandstone,
+famous for their massive monolithic architecture.
+        `,
+        images: ["https://files.catbox.moe/zlmb8z.jpeg"]
+      },
+      {
+        name: "KONDA REDDY BURUJU",
+        subtitle: "PLACES",
+        img: "https://files.catbox.moe/eh9zdq.jpeg",
+        mapUrl: "https://maps.app.goo.gl/Pj6NYpLoPoeNhZ7A6",
+        description: `
+Konda Reddy Buruju is a historic watchtower built during the Kakatiya dynasty,
+offering panoramic views and historical insight.
+        `,
+        images: ["https://files.catbox.moe/eh9zdq.jpeg"]
+      }
+    ],
+    arts: [
+      {name: "KALAMKARI", subtitle: "KALAMKARI ", img: "https://files.catbox.moe/98rwtu.jpeg",
+        description:`Kalamkari is a traditional Indian art form from Andhra Pradesh, using a 'kalam' (pen) for intricate hand-painting or block-printing on cotton/silk, often depicting Hindu mythology, nature, and folklore with natural dyes like indigo, pomegranate, and iron rust. This painstaking, multi-step process creates detailed textile art, with styles like hand-drawn Srikalahasti (mythological) and Machilipatnam (block-printed motifs) flourishing, showcasing vibrant colors and storytelling on fabrics used for scrolls, temple hangings, and apparel.`,
+        images: ["https://files.catbox.moe/98rwtu.jpeg"]
+      },
+      {name: "KONDAPALLI TOYS", subtitle: "BRIDRIWARE", img: "https://files.catbox.moe/9qy7mq.jpeg",
+         description:`Kondapalli toys, or Kondapalli Bommalu, are traditional, lightweight wooden toys from Kondapalli, Andhra Pradesh, known for their vibrant colors and detailed depictions of mythology, rural life, and animals, crafted from soft poniki wood using age-old techniques and natural dyes. This 400-year-old craft, centered in Bommala Colony, involves carving and painting these eco-friendly toys, a cultural heritage protected under the GI Act.`,
+         images: ["https://files.catbox.moe/9qy7mq.jpeg"]
+      },
+      {name: "NIRMAL PAINTINGS", subtitle: "CHERIAYAL PAINTINGS ", img: "https://files.catbox.moe/3tipkd.jpeg",
+           description:`Nirmal paintings are a traditional art form from Nirmal, Telangana, India, known for their vibrant colors, intricate detailing, and distinct golden hues, often depicting mythological scenes or courtly life on lacquered wood. Originating over 400 years ago under the Nizams, artisans sketch designs, fill them with natural colors, add gold highlights, and finish with a glossy varnish for a royal look, making them popular for home decor and as collectibles.`,
+           images: ["https://files.catbox.moe/3tipkd.jpeg"]
+      } ,
+      {name: "ETIKOPPAKA TOYS", subtitle: "ETTIKOPPAKA TOYS ", img: "https://files.catbox.moe/sg8k3j.jpeg",
+         description:`Etikoppaka toys are exquisite, eco-friendly lacquered wooden toys from Etikoppaka village in Andhra Pradesh, India, known for their vibrant colors from natural dyes (seeds, roots) and soft "Ankudu" wood, representing a 400-year-old craft where artisans (increasingly women) create toys, kitchen sets, and decorative items, promoting traditional skills and sustainable play. These GI-tagged crafts are famed for their cultural connection, traditional techniques like wood turning, and use of organic materials, making them safe and cherished`,
+         images: ["https://files.catbox.moe/sg8k3j.jpeg"]
+      },  
+    ],
+    tribals: [
+      {name: "CHENCHU", subtitle: "CHENCHU", img: "https://files.catbox.moe/wchuo3.jpg",
+       description:` The Chenchus are referred to as one of the Primitive Tribal Groups that are still dependent on forests and do not cultivate land but hunt for a living. Non-tribe people living among them rent land from the Chenchus and pay a portion of the harvest. Other people also settled among them with the help of the Chenchus and learned agriculture from them, and the nomadic Banjara herders who graze their cattle in the forest also have been allotted land there. The Chenchus have responded unenthusiastically to government efforts to induce them to take up agriculture themselves.
+The Chenchus are primarily Hindus. The legendary Shaiva saint Kannappa is also a Chenchu and is revered in Hindu Shaivic traditions for his deep devotion to Lord Shiva. His story is closely connected with the Srikalahasteeswara Temple in Andhra Pradesh. He is one of the 63 Nayanmars in the Saiva Siddhanta tradition and believed to be a reincarnation of Arjuna from the Mahabharata times. `,
+       images: ["https://files.catbox.moe/wchuo3.jpg"]
+      },
+      {name: "YANADIS", subtitle: "YANADIS", img: "https://files.catbox.moe/uet6rp.jpeg",
+         description:` The Yenadis also spelled Yanadi are one of the Scheduled tribes of India. They live in Andhra Pradesh in Nellore, Chittoor and Prakasam districts. The tribe is divided among three subgroups: the Manchi Yanadi, Adavi Yanadi, and Challa Yanadi.
+
+
+Group of Yanadi men
+The Yenadis are the largest tribal group in Andhra Pradesh. [1]
+
+The Yenadis are a scheduled tribe with deep knowledge of local flora and fauna[citation needed], thriving through traditional hunting and gathering lifestyles based in Andhra Pradesh.
+
+Despite modern challenges, they sustain their unique culture through resilience and community bonds. `,
+        images: ["https://files.catbox.moe/uet6rp.jpeg"]
+      },
+      {name: "GONDS", subtitle: "GONDS", img: "https://files.catbox.moe/06cdkn.jpeg",
+         description:` The Gond have formed many kingdoms of historical significance. Gondwana was the ruling kingdom in the Gondwana region of India. This includes the eastern part of the Vidarbha of Maharashtra. The Garha Kingdom includes the parts of Madhya Pradesh immediately to the north of it and parts of western Chhattisgarh. The wider region extends beyond these, also including parts of northern Telangana, western Odisha, and southern Uttar Pradesh.
+
+Gondi is claimed to be related to the Telugu language. The 2011 Census of India recorded about 2.4 million speakers of Gondi as a macrolanguage and 2.91 million speakers of languages within the Gondi subgroup, including languages such as Maria (also known as Maadiya Gond).[10][11][12] Many Gonds also speak regionally dominant languages such as Hindi, Marathi, Odia, and Telugu.
+
+According to the 1971 census, the Gondi population was 5,653,422. By 1991, this had increased to 7,300,998,[13][page needed] and by 2001, the figure was 8,501,549. For the past few decades, the group has been witness to the Naxalite–Maoist insurgency.[14] Gondi people, at the behest of the Chhattisgarh government, formed the Salwa Judum, an armed militant group, to fight the Naxalite insurgency. This was disbanded by order of the Supreme Court of India on 5 July 2011, however. `,
+       images: ["https://files.catbox.moe/06cdkn.jpeg"]
+      },
+      {name: "KOYA", subtitle: "KOYA", img: "https://files.catbox.moe/44qaqi.jpeg",
+         description:` The Koya are an Indian tribal community found in the states of Andhra Pradesh, Telangana, Chhattisgarh, and Odisha. The Koyas call themselves Koitur in their dialect. The Koyas speak the Koya language, also known as Koya basha, which is a Dravidian language related to Gondi.
+         The Koya are commonly referred to as Koi, Koyalu, Koyollu, Koya Doralu, Dorala Sattam, etc. Koya tribes can be further divided into Koya, Doli Koya, Gutta Koya or Gotti Koya, Kammara Koya, Musara Koya, Oddi Koya, Pattidi Koya, Rasha Koya, Lingadhari Koya (ordinary), Kottu Koya, Bhine Koya, Raja Koya, etc. `,
+         images: ["https://files.catbox.moe/44qaqi.jpeg"]
+      },
+    ],
+    culture: [
+      {name: "ART & CRAFT",  img: "https://files.catbox.moe/msh2ar.jpg" ,
+      images: ["https://files.catbox.moe/msh2ar.jpg"],
+      description: `
+                       The art of Andhra Pradesh is not limited to being traditional or modern - you can find a variety of designs blended in different kinds of colours. There is something fresh about the paintings, handicrafts, and handlooms which are merely sub-categories of the art and craft found here. No other state can compete with Andhra in terms of its crafts and let's be honest, the state is bound to be incomplete without its existence. Right from when they are born, the Telugu people are trained to be experts in creating metal crafts, toys, saris, stone crafts, brassware and the like by following the traditional methods even today
+                       Apart from Indians, people from all over the world to flock to Andhra Pradesh so as to experience this truly amazing form of art. The luxurious nature of the crafts of the state is a hit in India, as well as abroad, and is a huge income-generating source for the people of the state.
+                    ` ,
+      },
+      {name: "IKAT-HANDLOOMS",  img: "https://files.catbox.moe/tavq3j.jpg" ,
+      images: ["https://files.catbox.moe/tavq3j.jpg"],
+      description: `The state of Andhra Pradesh is also very famous due to the skilful hand-weaving quality displayed by the local residents, especially Ikat. This practice of using and selling hand-stitched clothes is a traditional practice being followed till date. The state has some royal dress material and saris with intricate designs to offer. All the handmade designs are very delicate and carefully woven. Every sari is adorned with a 'pallu' and a thin border which is embroidered with some kind of golden thread work. 
+
+Exclusive to Andhra Pradesh, Ikat is renowned the world-over for its intricate designs and patterns which are also closely followed in Orissa and Gujarata. It originates in the villages of Nalgonda district and involves weaving randomly dyed yarns in a geometric or zigzag patter giving the finished cloth an unparalleled beautiful design. Ikat handlooms can be described as the jewel in the crown of Andhra Pradesh culture`,
+      },
+      {name: "ARCHITECTURE",  img: "https://files.catbox.moe/8pzao9.jpg" ,
+      images: ["https://files.catbox.moe/8pzao9.jpg"],
+      description: `Andhra Pradesh’s rich history of dynasties and kingdoms influenced the architecture significantly. The Dravidian style of architecture is intertwined with cultural practices of rulers from Chola, Chalukyas, Vijayanagar, Satavahanas and Gajapati empires. There are many Buddhist and Hindu temples that resemble the trademark Dravidian style, towering stone structures that are decorated with carvings of religious deities and symbols. Intricate details and flawless engravings are visible on almost every monument dating from that time. Diversity of the architecture compliments the harmony of the Telugu culture brilliantly.`,
+      },
+      {name: "LITERATURE",  img: "https://files.catbox.moe/9n7edu.jpg" ,
+      images: ["https://files.catbox.moe/9n7edu.jpg"],
+      description: `Telugu is the official language spoken by natives in Andhra Pradesh and neighbouring states. It is one of the ancient Dravidian languages, dating back to first millennium AD. Many scholars have found inscriptions in Telugu from 500 BC to 100 BC, proving its existence goes way back. Even though it originates from Proto-Dravidian sub-language, literary experts have confirmed its connection to Sanskrit as well as Hindi. Ancient poets  Nannaya, Tikkana and Yerrapragada constitute the holy ‘Trinity of Poets’ that are credited for reviving the language and promoting its vocabulary through popular translational works like Mahabharata.`,
+      },
+      {name: "SOCIAL CUSTOMS & TRADITIONS",  img: "https://files.catbox.moe/676trk.jpg" ,
+      images: ["https://files.catbox.moe/676trk.jpg"],
+      description: `Andhra Pradesh, like many Indian states, is a rich concoction of cultures, religious practices, traditions, beliefs and ethnicity. Ethnic tribesmen and urban citizens live in perfect harmony and you will see natives coming together, celebrating festivals like Ugadi (Telugu New Year), Makar Sankranti, Ram Navami, Maha Shivratri, Dasara and Diwali. Many citizens still believe in ancient traditions and pursue them sincerely. Muggulu is one such tradition where people decorate entrances with white rice powder. These age-old traditions are prevalent in many households and may vary depending on ethnicity. This is a speciality of Andhra Pradesh.`,
+      },
+    ]
+  }
+};
+
+
+    // ========= SCRIPT FUNCTIONS =========
+    const screenSplash   = document.getElementById("screen-splash");
+    const screenStates   = document.getElementById("screen-states");
+    const screenDetail   = document.getElementById("screen-detail");
+    const screenCategory = document.getElementById("screen-category");
+    const screenPlace    = document.getElementById("screen-place-detail");
+
+    const stateListEl        = document.getElementById("stateList");
+    const searchStatesInput  = document.getElementById("searchStates");
+    const detailStateTitle   = document.getElementById("detailStateTitle");
+    const btnBack            = document.getElementById("btnBack");
+    const btnBackFromList    = document.getElementById("btnBackFromList");
+    const btnBackFromPlace   = document.getElementById("btnBackFromPlace");
+    const listTitleEl        = document.getElementById("listTitle");
+    const listStateSubtitle  = document.getElementById("listStateSubtitle");
+    const listSearchInput    = document.getElementById("listSearchInput");
+    const itemListEl         = document.getElementById("itemList");
+
+    const placeTitleEl       = document.getElementById("placeTitle");
+    const placeVideoFrame    = document.getElementById("placeVideoFrame");
+    const placeDescriptionEl = document.getElementById("placeDescription");
+    const placeImagesEl      = document.getElementById("placeImages");
+
+    let currentStateName = null;
+    let currentCategoryKey = null;
+    let currentItems = [];
+
+    function showScreen(name) {
+      [screenSplash, screenStates, screenDetail, screenCategory, screenPlace].forEach((s) =>
+        s.classList.remove("active")
+      );
+      if (name === "splash")   screenSplash.classList.add("active");
+      if (name === "states")   screenStates.classList.add("active");
+      if (name === "detail")   screenDetail.classList.add("active");
+      if (name === "category") screenCategory.classList.add("active");
+      if (name === "place")    screenPlace.classList.add("active");
+    }
+
+    setTimeout(() => {
+      showScreen("states");
+    }, 3000);
+
+    function renderStates(list) {
+      stateListEl.innerHTML = "";
+      list.forEach((st) => {
+        const card = document.createElement("div");
+        card.className = "state-card";
+        card.onclick = () => openStateDetail(st);
+
+        const icon = document.createElement("div");
+        icon.className = "state-icon";
+
+        const img = document.createElement("img");
+        img.src = st.img;          // image path (you provide)
+        img.alt = st.name;
+
+        icon.appendChild(img);
+
+
+        const textWrap = document.createElement("div");
+        const main = document.createElement("div");
+        main.className = "state-text-main";
+        main.textContent = st.name;
+
+        const sub = document.createElement("div");
+        sub.className = "state-text-sub";
+        sub.textContent = st.capital;
+
+        textWrap.appendChild(main);
+        textWrap.appendChild(sub);
+
+        const arrow = document.createElement("div");
+        arrow.className = "state-arrow";
+        arrow.innerHTML = "&gt;";
+
+        card.appendChild(icon);
+        card.appendChild(textWrap);
+        card.appendChild(arrow);
+
+        stateListEl.appendChild(card);
+      });
+    }
+
+    renderStates(states);
+
+    searchStatesInput.addEventListener("input", () => {
+      const q = searchStatesInput.value.toLowerCase().trim();
+      renderStates(
+        states.filter((s) => s.name.toLowerCase().includes(q) || s.capital.toLowerCase().includes(q))
+      );
+    });
+
+    function openStateDetail(state) {
+      currentStateName = state.name;
+      detailStateTitle.textContent = state.name.toUpperCase();
+      showScreen("detail");
+    }
+
+    btnBack.addEventListener("click", () => showScreen("states"));
+
+    document.querySelectorAll(".tile").forEach((tile) => {
+      tile.addEventListener("click", () => {
+        openCategoryList(tile.dataset.category);
+      });
+    });
+
+    function openCategoryList(categoryKey) {
+      currentCategoryKey = categoryKey;
+      const contentForState = stateContent[currentStateName] || {};
+      currentItems = contentForState[categoryKey] || [];
+
+      listTitleEl.textContent = categoryKey.toUpperCase();
+      listStateSubtitle.textContent = currentStateName || "Coming soon";
+
+      listSearchInput.value = "";
+      renderItemList(currentItems);
+      showScreen("category");
+    }
+
+    function renderItemList(list) {
+      itemListEl.innerHTML = "";
+      if (!list.length) {
+        itemListEl.innerHTML = "<p class='empty-text'>Content coming soon for this category.</p>";
+        return;
+      }
+      list.forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.onclick = () => handleItemClick(item);
+
+        const thumb = document.createElement("div");
+        thumb.className = "item-thumb";
+        if (item.img) {
+          const img = document.createElement("img");
+          img.src = item.img;
+          img.alt = item.name;
+          thumb.appendChild(img);
+        }
+
+        const textWrap = document.createElement("div");
+        const main = document.createElement("div");
+        main.className = "item-text-main";
+        main.textContent = item.name;
+
+        const sub = document.createElement("div");
+        sub.className = "item-text-sub";
+        sub.textContent = item.subtitle || "";
+
+        textWrap.appendChild(main);
+        textWrap.appendChild(sub);
+
+        const dots = document.createElement("div");
+        dots.className = "item-dots";
+        dots.textContent = "⋯";
+
+        card.appendChild(thumb);
+        card.appendChild(textWrap);
+        card.appendChild(dots);
+
+        itemListEl.appendChild(card);
+      });
+    }
+
+   listSearchInput.addEventListener("input", () => {
+      const q = listSearchInput.value.toLowerCase().trim();
+      renderItemList(currentItems.filter((i) => i.name.toLowerCase().includes(q)));
+    });
+
+    btnBackFromList.addEventListener("click", () => showScreen("detail"));
+
+    function handleItemClick(item) {
+      openPlaceDetail(item);
+    }
+
+   function openPlaceDetail(item) {
+      placeTitleEl.textContent = item.name.toUpperCase();
+
+      // --- GET ELEMENTS ---
+      const videoContainer = document.getElementById("video-container");
+      const videoFrameDiv = videoContainer.querySelector(".video-frame");
+      const video = document.getElementById("placeVideoFrame");
+      const source = document.getElementById("placeVideoSource");
+      const mapBtn = document.getElementById("mapBtn");
+      const mainBody = document.querySelector(".place-body");
+
+      // --- 1. VISIBILITY LOGIC ---
+      const hasVideo = item.videoUrl && item.videoUrl.trim() !== "";
+      const hasMap = item.mapUrl && item.mapUrl.trim() !== "";
+
+      // Show container if we have EITHER a video OR a map link
+      // (This ensures the button is visible even without a video)
+      if (hasVideo || hasMap) {
+        videoContainer.style.display = "block";
+      } else {
+        videoContainer.style.display = "none";
+      }
+
+      // Handle Video Player specifically (hide black box if no video)
+      if (hasVideo) {
+        videoFrameDiv.style.display = "block";
+        source.src = item.videoUrl;
+        video.load();
+        video.style.display = "block";
+      } else {
+        videoFrameDiv.style.display = "none";
+        video.pause();
+        source.src = "";
+      }
+
+      // --- 2. MAP BUTTON ACTION ---
+      mapBtn.onclick = function() {
+        if (item.mapUrl) {
+          window.open(item.mapUrl, "_blank");
+        } else {
+          window.open("http://googleusercontent.com/maps.google.com/maps?q=" + encodeURIComponent(item.name), "_blank");
+        }
+      };
+
+      // --- 3. PREPARE CONTENT ---
+      placeDescriptionEl.textContent = item.description || "";
+      
+      placeImagesEl.innerHTML = "";
+      (item.images || []).forEach((url) => {
+        const img = document.createElement("img");
+        img.src = url;
+        placeImagesEl.appendChild(img);
+      });
+
+      // --- 4. RE-ORDERING LOGIC (Here is the change) ---
+      
+      // Scenario 1: Andhra Pradesh Places
+      if (currentStateName === "Andhra Pradesh" && currentCategoryKey === "places") {
+        // ORDER: Images -> Button (inside videoContainer) -> Description
+        mainBody.appendChild(placeImagesEl);
+        mainBody.appendChild(videoContainer); 
+        mainBody.appendChild(placeDescriptionEl);
+      } 
+      // Scenario 2: Arts, Tribals, Culture (Any state)
+      else if (currentCategoryKey !== "places") {
+         // ORDER: Button (inside videoContainer) -> Images -> Description
+         mainBody.appendChild(videoContainer);
+         mainBody.appendChild(placeImagesEl);
+         mainBody.appendChild(placeDescriptionEl);
+      }
+      // Scenario 3: Default (e.g., J&K Places)
+      else {
+        // ORDER: Video/Button -> Description -> Images
+        mainBody.appendChild(videoContainer);
+        mainBody.appendChild(placeDescriptionEl);
+        mainBody.appendChild(placeImagesEl);
+      }
+
+      showScreen("place");
+    }
+    btnBackFromPlace.addEventListener("click", () => showScreen("category"));
+  </script>
+</body>
+</html>
